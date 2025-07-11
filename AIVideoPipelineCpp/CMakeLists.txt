@@ -1,15 +1,28 @@
-﻿# CMakeList.txt: файл проекта CMake верхнего уровня; проведите глобальную конфигурацию
-# и включите сюда подпроекты.
-#
-cmake_minimum_required (VERSION 3.8)
+﻿cmake_minimum_required(VERSION 3.20)
+project(AIVideoPipelineCpp LANGUAGES CXX)
 
-# Включение горячей перезагрузки для компиляторов MSVC, если поддерживается.
-if (POLICY CMP0141)
-  cmake_policy(SET CMP0141 NEW)
-  set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<IF:$<AND:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>,$<$<CONFIG:Debug,RelWithDebInfo>:EditAndContinue>,$<$<CONFIG:Debug,RelWithDebInfo>:ProgramDatabase>>")
-endif()
+# 1) Включаем C++20
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
-project ("AIVideoPipelineCpp")
+# 2) Единая папка для всех exe (для мультиконфиг-генераторов VS)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+foreach(cfg IN ITEMS Debug Release RelWithDebInfo MinSizeRel)
+  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_${cfg} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
+endforeach()
 
-# Включите подпроекты.
-add_subdirectory ("AIVideoPipelineCpp")
+# 3) Покажем пути, если пригодится
+message(STATUS "Source dir: ${CMAKE_SOURCE_DIR}")
+message(STATUS "Binary dir: ${CMAKE_BINARY_DIR}")
+
+# 4) Добавляем подпроекты
+add_subdirectory(apps/api_server)
+# в будущем сюда же можно добавить:
+# add_subdirectory(apps/broker_worker)
+# add_subdirectory(apps/db_migrator)
+# add_subdirectory(apps/video_pipeline)
+# и, когда будут готовы, libs:
+# add_subdirectory(libs/core)
+# add_subdirectory(libs/tasks)
+# add_subdirectory(libs/utils)
