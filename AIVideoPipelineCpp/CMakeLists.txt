@@ -18,11 +18,8 @@ message(STATUS "Binary dir: ${CMAKE_BINARY_DIR}")
 
 # 4) Добавляем подпроекты
 add_subdirectory(apps/api_server)
-# в будущем сюда же можно добавить:
-# add_subdirectory(apps/broker_worker)
-# add_subdirectory(apps/db_migrator)
-# add_subdirectory(apps/video_pipeline)
-# и, когда будут готовы, libs:
-# add_subdirectory(libs/core)
-# add_subdirectory(libs/tasks)
+add_subdirectory(libs/core)            # ← вот он, наш новый модуль
+# в будущем:
 # add_subdirectory(libs/utils)
+# add_subdirectory(libs/tasks)
+# add_subdirectory(apps/video_pipeline)
